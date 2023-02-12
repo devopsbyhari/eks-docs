@@ -1,0 +1,20 @@
+1) Make it eks cluster is ready
+aws eks update-kubeconfig --region us-east-1 --name sample-ekscluster
+2) Deploy the deployment and service configurations in EKS
+kubectl create -f <deploymentfile>
+kubectl create -f <service>
+
+3) kubectl get pods  => to display all pods information
+   kubectl get pods -o wide => to get all information on nodes 
+4) Make sure those ports should be enable on Workernodes ( make it public )
+
+5) Make sure to webserver is running for access IP into browser 
+
+6) Access application IP:<nodeport> 
+
+7) Delete application 
+ kubectl delete -f <deploymentfile>
+ kubectl delete -f <service>
+
+
+   
