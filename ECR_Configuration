@@ -1,0 +1,20 @@
+# Create an ECR repository in console or AWS CLI
+aws ecr create-repository --repository-name aws-ecr-static --region us-east-1
+
+# Pusing docker image
+docker build -t 144004470165.dkr.ecr.us-east-1.amazonaws.com/ecr-aws-static:1.0 .
+
+# verify to authenticate ecr repository
+get the token while view push commands in console 
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 144004470165.dkr.ecr.us-east-1.amazonaws.com
+
+# push the image into registery
+docker push 144004470165.dkr.ecr.us-east-1.amazonaws.com/ecr-aws-static:1.0
+
+# Verify the ECR access to workernodes
+node role should be having below policys 
+AmazonEC2ContainerRegistryReadOnly, AmazonEC2ContainerRegistryPowerUser
+
+# Deploy the applications and test it
+while deploying user our image which were avalible in our ECR
+ 
