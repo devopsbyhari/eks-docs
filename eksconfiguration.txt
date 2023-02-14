@@ -22,7 +22,7 @@ It will help us to create IAM policys automatically
 eksctl create nodegroup --cluster=sample-ekscluster \
                        --region=us-east-1 \
                        --name=sample-ekscluster-ng-public1 \
-                       --node-type=t2.micro \
+                       --node-type=t3.small \
                        --nodes=2 \
                        --nodes-min=2 \
                        --nodes-max=4 \
@@ -49,3 +49,6 @@ kubectl version --client
 aws eks update-kubeconfig --region us-east-1 --name sample-ekscluster
 kubectl get nodes 
 kubectl get nodes -o wide 
+
+## Get capacity of pods for running in cluster 
+kubectl get node -o yaml | grep pods
