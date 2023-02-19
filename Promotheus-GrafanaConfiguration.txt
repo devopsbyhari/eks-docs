@@ -46,5 +46,44 @@ helm uninstall prometheus
 helm uninstall grafana
 
 
+====================================================================================================================================================================
+********************** Installation of grafana using helm along with Loadbalencer service ***********************************************************
+## Copy paste the following in a YAML file, name it grafana.yaml
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: <promotheus url>
+      access: proxy
+      isDefault: true
+      
+      
+## Add grafana helm charts 
+helm repo add grafana https://grafana.github.io/helm-charts
+
+## Create an namespace as grafana
+kubectl create namespace grafana
+
+## Install grafana 
+helm install grafana grafana/grafana \
+    --namespace grafana \
+    --set persistence.storageClassName="gp2" \
+    --set persistence.enabled=true \
+    --set adminPassword='EKS!sAWSome' \
+    --values grafana.yaml \
+    --set service.type=LoadBalancer
+## Get all resources 
+kubectl get all -n grafana
+
+## Get loadbalercer service and paste into browser to get grafana 
+
+## login as admin and below command to get password
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+
+
+
 
 
