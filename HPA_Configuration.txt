@@ -1,0 +1,36 @@
+## Make sure metrics-service should be up and running 
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+kubectl get deployment metrics-server -n kube-system
+
+## Deploy Sample application 
+kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+
+## Create HPA for deployment resource 
+kubectl autoscale deployment php-apache --cpu-percent=20 --min=1 --max=5
+
+## Get HPA details 
+kubectl get hpa
+
+## Create a load using below command 
+
+kubectl run -i \
+    --tty load-generator \
+    --rm --image=busybox \
+    --restart=Never \
+    -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://php-apache; done"
+
+
+## keep on watch deployment scale out 
+kubectl get hpa php-apache
+
+## stop load and check the status 
+kubectl get hpa
+
+## cleanup resources 
+kubectl delete deployment.apps/php-apache service/php-apache horizontalpodautoscaler.autoscaling/php-apache
+
+Reference:
+https://docs.aws.amazon.com/eks/latest/userguide/horizontal-pod-autoscaler.html
+
+
+
