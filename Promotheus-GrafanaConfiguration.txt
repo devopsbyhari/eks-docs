@@ -12,50 +12,39 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 kubectl get deployment metrics-server -n kube-system
 
 
-## Add the helm charts 
-helm repo add stable https://charts.helm.sh/stable
-
-## prometheus helm repo addtion
+## Steps to install promotheus 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm search repo prometheus-community
-
-## Create an namespace for deploying prometheus resource
-kubectl create namespace prometheus
-
-## Install kube-prometheus-stack
-helm install stable prometheus-community/kube-prometheus-stack -n prometheus
-kubectl get svc -n prometheus
-
-## expose load balencer service for our Prometheus and grafana
-kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus
-change type from ClusterIP => LoadBalencer
-
-kubectl edit svc stable-grafana -n prometheus
-change type from ClusterIP => LoadBalencer
-
-check the services now 
-kubectl get svc -n prometheus
-
-check the deployments now 
-kubectl get all -n prometheus
+helm repo update
+helm install prometheus prometheus-community/prometheus
 
 
+## Expose Nodeport service for prometheus
+kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=my-prometheus
 
-## Make sure to expose nodeport for accessing outside 
-kubectl get svc  -n prometheus -o yaml | sed 's/type: ClusterIP/type: NodePort/' | kubectl replace -f - 
+## Steps to Grafana 
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana stable/grafana
 
+## Expose NodePort service for Grafana
+kubectl expose service grafana --type=NodePort --target-port=3000 --name=my-grafana
 
-## Accces prometheus using IP:nodeport in browser
+## while access grafana user admin as username and password we will get it in secrets 
+kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 
-## Access grafana in broswser using below credentials 
-Username: admin
-Password: prom-operator
+## Create datasource for connnect grafana to prometheus 
 
 ## Expose predefined monitoring dashboard 
+https://grafana.com/grafana/dashboards?dataSource=prometheus&direction=desc&orderBy=reviewsCount
 12740
 3119
 6417
 4151
+
+## Uninstall Prometheus and Grafana
+helm uninstall prometheus
+helm uninstall grafana
+
 
 
 
