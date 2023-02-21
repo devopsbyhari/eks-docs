@@ -36,7 +36,9 @@ eksctl create nodegroup --cluster=sample-ekscluster \
                        --appmesh-access \
                        --alb-ingress-access 
 					   
-## Verify the subnets having connectivity
+## Verify the subnets having connectivity (keep all traffic inbound rules for all SecurityGroups)
+
+##Please make sure webserver should be up and running for all workdernodes while access application in browser
 
 ## install kubectl for compatability version eg : mine is using 1.21.14 
 
