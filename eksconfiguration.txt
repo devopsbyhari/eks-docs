@@ -40,6 +40,14 @@ eksctl create nodegroup --cluster=sample-ekscluster \
 ## Verify the subnets having connectivity (keep all traffic inbound rules for all SecurityGroups)
 
 ##Please make sure webserver should be up and running for all workdernodes while access application in browser
+#Linux 
+sudo yum install httpd -y
+sudo service httpd start 
+sudo service httpd status
+
+#Ubuntu
+sudo apt-get update -y
+sudo apt-get install apache2 -y
 
 ## install kubectl for compatability version eg : mine is using 1.22.17 
 
