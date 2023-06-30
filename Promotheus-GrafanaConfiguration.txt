@@ -24,7 +24,7 @@ kubectl expose service prometheus-server --type=NodePort --target-port=9090 --na
 ## Steps to Grafana 
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
-helm install grafana stable/grafana
+helm install grafana grafana/grafana
 
 ## Expose NodePort service for Grafana
 kubectl expose service grafana --type=NodePort --target-port=3000 --name=my-grafana
