@@ -1,4 +1,4 @@
-## Create an user in IAM and provide privilises for EKS access 
+## Create an user in IAM Role and attach to client machine and make sure that machine was having full privilises
 ## configure AWS CLI 
 https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
 ## Install EKS CTL tool
