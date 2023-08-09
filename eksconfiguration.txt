@@ -29,7 +29,7 @@ eksctl create nodegroup --cluster=sample-ekscluster \
                        --nodes-max=4 \
                        --node-volume-size=8 \
                        --ssh-access \
-                       --ssh-public-key=myweb9999 \
+                       --ssh-public-key=myeks \
                        --managed \
                        --asg-access \
                        --external-dns-access \
