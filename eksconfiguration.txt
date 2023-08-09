@@ -51,7 +51,7 @@ sudo apt-get install apache2 -y
 
 ## install kubectl for compatability version eg : mine is using 1.22.17 
 
-curl -LO https://dl.k8s.io/release/v1.22.17/bin/linux/amd64/kubectl
+curl -LO https://dl.k8s.io/release/v1.23.17/bin/linux/amd64/kubectl
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 kubectl version --client
 
