@@ -19,7 +19,8 @@ helm install prometheus prometheus-community/prometheus
 
 
 ## Expose Nodeport service for prometheus
-kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=my-prometheus
+## kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=my-prometheus
+kubectl expose service monitoring-kube-prometheus-prometheus --type=NodePort --target-port=9090 --name=my-prometheus
 
 ## Steps to Grafana 
 helm repo add grafana https://grafana.github.io/helm-charts
