@@ -8,19 +8,19 @@ eksctl version
 
 ##  Create an EKS cluster with empty node group
 
-eksctl create cluster --name=sample-ekscluster --region=us-east-1 --version 1.23 --zones=us-east-1a,us-east-1b --without-nodegroup 
+eksctl create cluster --name=myeks-cluster  --region=us-east-1 --version 1.23 --zones=us-east-1a,us-east-1b --without-nodegroup 
 
 ## Create & Associate IAM OIDC Provider for our EKS Cluster
 To enable and use AWS IAM roles for Kubernetes service accounts on our EKS cluster, we must create & associate OIDC identity provider.
 
-eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster sample-ekscluster --approve
+eksctl utils associate-iam-oidc-provider --region us-east-1 --cluster myeks-cluster --approve
 
 ## Create an EC2 key pair Or take existing key pair (myweb9999)
 
 ## Create Node Group with additional Add-Ons in Public Subnets
 It will help us to create IAM policys automatically
 
-eksctl create nodegroup --cluster=sample-ekscluster \
+eksctl create nodegroup --cluster=myeks-cluster \
                        --region=us-east-1 \
                        --name=sample-ekscluster-ng-public1 \
                        --node-type=t3.small \
@@ -57,7 +57,7 @@ kubectl version --client
 
 
 ## Get the config for cluster 
-aws eks update-kubeconfig --region us-east-1 --name sample-ekscluster
+aws eks update-kubeconfig --region us-east-1 --name myeks-cluster
 kubectl get nodes 
 kubectl get nodes -o wide 
 
