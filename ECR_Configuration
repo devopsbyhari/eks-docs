@@ -18,3 +18,4 @@ AmazonEC2ContainerRegistryReadOnly, AmazonEC2ContainerRegistryPowerUser
 # Deploy the applications and test it
 while deploying user our image which were avalible in our ECR
  
+Note : don't copy and paste this ECR registery url instead use your ECR
