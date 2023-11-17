@@ -13,25 +13,34 @@ kubectl get deployment metrics-server -n kube-system
 
 
 ## Steps to install promotheus 
+helm repo add stable https://charts.helm.sh/stable
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install prometheus prometheus-community/prometheus
+helm search repo prometheus-community
 
+## Create namespace and update them 
+kubectl create ns prometheus
 
-## Expose Nodeport service for prometheus
-## kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=my-prometheus
-kubectl expose service monitoring-kube-prometheus-prometheus --type=NodePort --target-port=9090 --name=my-prometheus
+# Install prometheus stack
+helm install stable prometheus-community/kube-prometheus-stack -n prometheus
 
-## Steps to Grafana 
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo update
-helm install grafana grafana/grafana
+# Check pods if it is runnuing or not 
+kubectl get pods -n prometheus
 
-## Expose NodePort service for Grafana
-kubectl expose service grafana --type=NodePort --target-port=3000 --name=my-grafana
+# Get the services 
+kubectl get svc -n prometheus
 
-## while access grafana user admin as username and password we will get it in secrets 
-kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+# Edit both services for LoadBalancer
+kubectl edit svc stable-kube-prometheus-sta-prometheus -n prometheus
+kubectl edit svc stable-grafana -n prometheus
+
+# Verify services 
+kubectl get svc -n prometheus
+
+# Access url for grafana and use below credentials 
+UserName: admin 
+Password: prom-operator
+
+# Access prometheus using port number <loadbaler>:9090
 
 ## Create datasource for connnect grafana to prometheus 
 
@@ -45,46 +54,3 @@ https://grafana.com/grafana/dashboards?dataSource=prometheus&direction=desc&orde
 ## Uninstall Prometheus and Grafana
 helm uninstall prometheus
 helm uninstall grafana
-
-
-====================================================================================================================================================================
-********************** Installation of grafana using helm along with Loadbalencer service ***********************************************************
-## Copy paste the following in a YAML file, name it grafana.yaml
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-    - name: Prometheus
-      type: prometheus
-      url: <promotheus url>
-      access: proxy
-      isDefault: true
-      
-      
-## Add grafana helm charts 
-helm repo add grafana https://grafana.github.io/helm-charts
-
-## Create an namespace as grafana
-kubectl create namespace grafana
-
-## Install grafana 
-helm install grafana grafana/grafana \
-    --namespace grafana \
-    --set persistence.storageClassName="gp2" \
-    --set persistence.enabled=true \
-    --set adminPassword='EKS!sAWSome' \
-    --values grafana.yaml \
-    --set service.type=LoadBalancer
-## Get all resources 
-kubectl get all -n grafana
-
-## Get loadbalercer service and paste into browser to get grafana 
-
-## login as admin and below command to get password
-kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-
-
-
-
-
